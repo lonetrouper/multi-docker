@@ -13,7 +13,7 @@ after_success:
         - docker build -t pratush/multi-nginx ./nginx
         - docker build -t pratush/multi-server ./server
         - docker build -t pratush/multi-worker ./worker
-        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+        - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD"
         # Take those images and push them to dockerhub
         - docker push pratush/multi-client
         - docker push pratush/multi-nginx
