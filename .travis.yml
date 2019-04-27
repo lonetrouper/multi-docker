@@ -1,0 +1,22 @@
+sudo: required
+services:
+        - docker
+
+before_install:
+        - docker build -t pratush/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+        - docker run pratush/react-test npm test -- --coverage
+
+after_success:
+        - docker build -t pratush/multi-client ./client
+        - docker build -t pratush/multi-nginx ./nginx
+        - docker build -t pratush/multi-server ./server
+        - docker build -t pratush/multi-worker ./worker
+        - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+        # Take those images and push them to dockerhub
+        - docker push pratush/multi-client
+        - docker push pratush/multi-nginx
+        - docker push pratush/multi-server
+        - docker push pratush/multi-worker
+
